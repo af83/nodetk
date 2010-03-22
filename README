@@ -1,0 +1,32 @@
+
+## Setup
+How to use these libraries / tools :
+
+In your .bashrc (or whatever rc) file, set the bin dir in your PATH env variable:
+export PATH=$PATH:/path/to/nodetk/bin
+
+and the src dir in your NODE_PATH env variable:
+export NODE_PATH=$NODE_PATH:/path/to/nodetk/src
+
+You should then be able to use the nodetk modules with something like: 
+var callbacks = require("nodetk/orchestration/callbacks");
+
+You now have the following available commands:
+nodetests [-v]
+
+
+## License
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see [http://www.fsf.org/licensing/licenses/agpl-3.0.html](http://www.fsf.org/licensing/licenses/agpl-3.0.html)
+
