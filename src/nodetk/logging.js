@@ -5,7 +5,14 @@ var sys = require("sys");
 
 var debug_active = false;
 exports.debug = function(/* stuff to print*/) {
-  if(debug_active) sys.puts.apply(this, arguments);
+  if(debug_active) {
+    var args = Array.prototype.slice.apply(arguments);
+    var str = args.map(function(elem) {
+      if(typeof elem == "string") return elem;
+      return JSON.stringify(elem);
+    }).join(" ");
+    sys.puts(str);
+  }
 };
 
 exports.debug.on = function() {debug_active=true};
