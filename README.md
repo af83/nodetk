@@ -1,3 +1,14 @@
+# nodetk
+
+## Introduction
+nodetk is a set of small libraries intended to facilitate the use of nodejs.
+It includes:
+
+ * an orchestration facility, to run a set of functions in parallel or one at a time
+ * a debug function, which you can activate/deactivate widely
+ * a few functions to manipulate directories or files
+ * a test runner, to collect and run tests one at a time
+ * miscellaneous utility functions
 
 ## Setup
 How to use these libraries / tools :
@@ -6,13 +17,22 @@ In your .bashrc (or whatever rc) file, set the bin dir in your PATH env variable
 export PATH=$PATH:/path/to/nodetk/bin
 
 and the src dir in your NODE_PATH env variable:
+<pre><code>
 export NODE_PATH=$NODE_PATH:/path/to/nodetk/src
+</code></pre>
 
-You should then be able to use the nodetk modules with something like: 
+You should then be able to use the nodetk modules with something like:
+<pre><code>
 var callbacks = require("nodetk/orchestration/callbacks");
+</code></pre>
 
 You now have the following available commands:
-nodetests [-v]
+<pre><code>
+nodetests [-v] [-d]
+</code></pre>
+
+The -v option displays some info about what tests are rand.
+The -d option enables the debug functions.
 
 
 ## License
