@@ -10,6 +10,7 @@ var sys = require("sys");
 
 var custom_assert = require("nodetk/testing/custom_assert");
 var CLB = require('nodetk/orchestration/callbacks');
+var debug = require('nodetk/logging').debug
 
 var verbose;
 var start_time;
@@ -18,6 +19,8 @@ exports.run = function(tests_files) {
   var args = {};
   process.argv.forEach(function(e){args[e]=true;});
   verbose = args['-v'];
+  if (args['-d']) debug.on();
+  else debug.off();
 
   start_time = new Date().getTime();
   CLB.sync_calls(run_test_file, tests_files, function() {
