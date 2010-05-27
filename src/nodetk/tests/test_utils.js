@@ -37,5 +37,11 @@ exports.tests = [
   assert.deepEqual(obj2, {tutu: 'tutu'});
 }],
 
+['count properties', 3, function() {
+  assert.equal(utils.count_properties({}), 0);
+  assert.equal(utils.count_properties({toto: 'titi'}), 1);
+  assert.equal(utils.count_properties({toto: 'titi', a:1, b:0}), 3);
+}],
+
 ];
 

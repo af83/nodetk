@@ -19,3 +19,11 @@ exports.extend = function(target, obj1, obj2) {
   return target;
 };
 
+exports.count_properties = function(obj) {
+  /* Counts and returns the number of properties in obj.
+   */
+  var count = 0;
+  for(property in obj) count++;
+  return count;
+}
+
