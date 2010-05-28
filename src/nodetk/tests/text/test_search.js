@@ -1,7 +1,6 @@
 var sys = require("sys");
 var assert = require("nodetk/testing/custom_assert");
 var debug = require('nodetk/logging').debug;
-var utils = require('nodetk/utils');
 
 var search = require('nodetk/text/search');
 

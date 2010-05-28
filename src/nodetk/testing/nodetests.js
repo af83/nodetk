@@ -1,7 +1,7 @@
 /* Run all tests present in files 'test_*.js' present in given directory or sub dirs.
  * Search recursivly for test files.
  */
-
+require.paths.unshift(__dirname + '/../..') // to have nodetk in require.paths
 var fs = require('nodetk/fs');
 var sys = require('sys');
 
