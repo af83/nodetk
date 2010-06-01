@@ -31,11 +31,13 @@ var check_url = exports.check_url = function(url, options, callback, fallback) {
   var client = http.createClient(parsed_url.port || 80, parsed_url.hostname);
   client.addListener('error', function(error) {
     sys.puts("Error on client:", error.message, '\n', error.stack);
+    fallback && fallback(error);
   });
   var path = (parsed_url.pathname || '/') + (parsed_url.search || '');
   var request = client.request('GET', path, {host: parsed_url.host});
   request.addListener('response', function(response) {
-    if(response.statusCode == 301 && options.max_redirects > 0) {
+    if(response.statusCode >= 300 && response.statusCode < 400 &&
+       options.max_redirects > 0) {
       var url2 = response.headers['location'];
       options.max_redirects -= 1;
       check_url(url2, options, callback, fallback);
