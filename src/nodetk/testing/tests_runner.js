@@ -10,7 +10,7 @@ var sys = require("sys");
 
 var custom_assert = require("nodetk/testing/custom_assert");
 var CLB = require('nodetk/orchestration/callbacks');
-var debug = require('nodetk/logging').debug
+var debug = require('nodetk/logging').debug;
 
 var verbose;
 var start_time;
@@ -50,13 +50,20 @@ var run_test = function(name, expected_asserts, test, callback) {
 }
 
 var run_test_file = function(test_file, callback) {
-  var module = require(test_file);
-  setup = module.setup || dummy;
-  CLB.sync_calls(run_test, module.tests || [], function() {
-    verbose && sys.puts('-----------------');
-    verbose && sys.puts(test_file + '.js: ' + module.tests.length + " test(s) succeed\n");
-    callback();
-  });
+  debug('Run test file ' + test_file);
+  try {
+    var module = require(test_file);
+    setup = module.setup || dummy;
+    CLB.sync_calls(run_test, module.tests || [], function() {
+      verbose && sys.puts('-----------------');
+      verbose && sys.puts(test_file + '.js: ' + module.tests.length +
+                          " test(s) succeed\n");
+      callback();
+    });
+  } catch (e) {
+    sys.puts("Error while running test file " + test_file);
+    throw e;
+  }
 };
 
 var display_process_infos = function() {
