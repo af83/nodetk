@@ -45,6 +45,15 @@ var responder_404 = function(request, response) {
 };
 
 
+var responder_empty_header = function(request, response) {
+  response.writeHead(301, {
+    "a": "",
+    "Location": url + "/toto"
+  });
+  response.end('\n');
+};
+
+
 
 exports.tests = [
 
@@ -88,11 +97,19 @@ exports.tests = [
   web.check_url(url, {}, function(info) {
     assert.ok(false, "This should never be called");
   }, function(err) {
-    test_server.server.close();
     assert.ok(err);
   });
 }],
 
+['check url: empty header field', 1, function() {
+  test_server.responders.push(responder_empty_header);
+  web.check_url(url, {}, function(info) {
+    assert.ok(false, "This should never be called");
+  }, function(err) {
+    test_server.server.close();
+    assert.ok(err);
+  });
+}],
 
 ]
 

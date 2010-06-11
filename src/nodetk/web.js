@@ -30,7 +30,7 @@ var check_url = exports.check_url = function(url, options, callback, fallback) {
   var parsed_url;
   try {
     parsed_url = URL.parse(url);
-  } catch (e) {
+  } catch (error) {
     sys.puts("Error on client:", error.message, '\n', error.stack);
     fallback && fallback(error);
   }
