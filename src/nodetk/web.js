@@ -27,7 +27,13 @@ var check_url = exports.check_url = function(url, options, callback, fallback) {
   var options = extend({
     max_redirects: 3
   }, options);
-  var parsed_url = URL.parse(url);
+  var parsed_url;
+  try {
+    parsed_url = URL.parse(url);
+  } catch (e) {
+    sys.puts("Error on client:", error.message, '\n', error.stack);
+    fallback && fallback(error);
+  }
   var client = http.createClient(parsed_url.port || 80, parsed_url.hostname);
   client.addListener('error', function(error) {
     sys.puts("Error on client:", error.message, '\n', error.stack);
