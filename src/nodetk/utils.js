@@ -27,3 +27,18 @@ exports.count_properties = function(obj) {
   return count;
 }
 
+exports.isArray = function(obj) {
+  /** Returns True if obj is an Array.
+   */
+  return obj.constructor == Array;
+};
+
+exports.each = function(obj, callback) {
+  /** Call callback(attr_name, attr_value) for each attr of obj.
+   * Only works on Objects.
+   */
+  for(var attr in obj) {
+    callback(attr, obj[attr]);
+  }
+};
+

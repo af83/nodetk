@@ -43,5 +43,30 @@ exports.tests = [
   assert.equal(utils.count_properties({toto: 'titi', a:1, b:0}), 3);
 }],
 
+['isArray()', 10, function() {
+  var arrays = [[], ['a'], [1, 2], [{}]],
+      not_arrays = [{}, 'a', "abc", {a: "toto"}, '', 3];
+  arrays.forEach(function(e) {assert.ok(utils.isArray(e))});
+  not_arrays.forEach(function(e) {assert.ok(!utils.isArray(e))});
+}],
+
+['each(obj, callback)', 4, function() {
+  var expected = {
+    'toto': 'titi',
+    3: "tutu",
+   'a': undefined
+  };
+  utils.each({
+    toto: 'titi',
+    3: 'tutu',
+    a: undefined
+  }, function(key, val) {
+    var v = expected[key]
+    assert.equal(v, val);
+    delete expected[key];
+  });
+  assert.deepEqual(expected, {});
+}],
+
 ];
 
