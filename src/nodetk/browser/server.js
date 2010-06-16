@@ -26,6 +26,13 @@ exports.serve_modules = function(server, options) {
     additional_files: {}
   }, options);
 
+  utils.extend(options.additional_files, {
+    '/init_browser.js': __dirname + "/static/init_browser.js",
+    '/yabble.js': __dirname + '/../../../vendor/yabble/lib/yabble.js',
+    '/child_process.js': __dirname + '/static/child_process.js',
+    '/events.js': __dirname + '/static/events.js'
+  });
+
   var fpaths = nodetkfs.find_modules_paths(options.modules);
   nodetkfs.find_packages_paths(options.packages, function(fpaths2) {
     utils.extend(fpaths, fpaths2);
