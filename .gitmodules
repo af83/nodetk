@@ -1,0 +1,3 @@
+[submodule "vendor/yabble"]
+	path = vendor/yabble
+	url = git://github.com/jbrantly/yabble.git

@@ -31,6 +31,7 @@ exports.run = function(tests_files) {
   });
 };
 
+
 var dummy = function(callback) {callback()};
 var setup;
 
@@ -49,7 +50,7 @@ var run_test = function(name, expected_asserts, test, callback) {
   });
 }
 
-var run_test_file = function(test_file, callback) {
+var run_test_file = exports.run_test_file = function(test_file, callback) {
   debug('Run test file ' + test_file);
   try {
     var module = require(test_file);
@@ -58,7 +59,7 @@ var run_test_file = function(test_file, callback) {
       verbose && sys.puts('-----------------');
       verbose && sys.puts(test_file + '.js: ' + module.tests.length +
                           " test(s) succeed\n");
-      callback();
+      callback && callback();
     });
   } catch (e) {
     sys.puts("Error while running test file " + test_file);
