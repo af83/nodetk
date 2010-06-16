@@ -9,18 +9,8 @@ var http = require("http"),
 
 var server = http.createServer();
 bserver.serve_modules(server, {
-  modules: [
-    'assert', 'sys',
-    'nodetk/testing/tests_runner',
-    'nodetk/logging',
-    'nodetk/testing/custom_assert',
-    'nodetk/orchestration/callbacks',
-    'nodetk/tests/orchestration/test_callbacks',
-    'nodetk/utils',
-    'nodetk/tests/test_utils',
-    'nodetk/text/search',
-    'nodetk/tests/text/test_search'
-  ],
+  modules: ['assert', 'sys'],
+  packages: ['nodetk'],
   additional_files: {
     '/tests.html': __dirname + '/tests.html',
     '/tests.js': __dirname + '/tests.js',
@@ -33,4 +23,5 @@ bserver.serve_modules(server, {
 server.listen(8549);
 sys.puts('Server listning on http://localhost:8549' +
          '\nGo there to run browsers tests.');
+
 

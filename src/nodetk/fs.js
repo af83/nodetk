@@ -6,6 +6,7 @@ var PATH = require('path');
 
 var CLB = require('nodetk/orchestration/callbacks');
 var debug = require('nodetk/logging').debug;
+var utils = require('nodetk/utils');
 
 
 var getFilesDirs = function(path, callback, fallback) {
@@ -75,6 +76,7 @@ var existsSync = exports.existsSync = function(path) {
 var find_modules_paths = exports.find_modules_paths = function(module_names) {
   /** Returns dic {} associating each module name with its path.
    *  If a module path has not been found, the associated value is null.
+   *  Sunchronous function.
    */
   var results = {};
   module_names.forEach(function(name){
@@ -94,5 +96,45 @@ var find_modules_paths = exports.find_modules_paths = function(module_names) {
     });
   });
   return results;
+};
+
+
+var find_packages_paths = exports.find_packages_paths = function(package_names, callback, fallback) {
+  /** Returns dic associating each module name (of every package) with its path.
+   *  ASynchronous function.
+   */
+  var package2dir = {};
+  var cpt_dirs = 0;
+  package_names.forEach(function(pname) {
+    for(var i=0; i<require.paths.length; i++) {
+      var dir_path = PATH.normalize(require.paths[i] + '/' + pname);
+      if(existsSync(dir_path)) {
+        package2dir[pname] = dir_path;
+        cpt_dirs += 1;
+        break;
+      }
+    }
+  });
+
+  var results = {};
+
+  var waiter = CLB.get_waiter(cpt_dirs, function() {
+    callback(results);
+  }, function(err) {
+    fallback && fallback(err);
+  });
+
+  utils.each(package2dir, function(pname, dir_path) {
+    getDeepFilesDirs(dir_path, function(fpaths) {
+      fpaths.filter(function(e){return e.match(/.?\.js$/)})
+            .forEach(function(fpath) {
+        var pos1 = dir_path.length;
+        var pos2 = fpath.lastIndexOf('.js');
+        var module_name = pname + fpath.slice(pos1, pos2);
+        results[module_name] = fpath;
+      });
+      waiter();
+    });
+  });
 };
 

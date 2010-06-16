@@ -1,4 +1,3 @@
-var sys = require('sys');
 var URL = require('url');
 
 var web = require('nodetk/web');
@@ -28,20 +27,23 @@ exports.serve_modules = function(server, options) {
   }, options);
 
   var fpaths = nodetkfs.find_modules_paths(options.modules);
+  nodetkfs.find_packages_paths(options.packages, function(fpaths2) {
+    utils.extend(fpaths, fpaths2);
 
-  var pathname2path = {};
-  for(var mname in fpaths) {
-    pathname2path['/' + mname + '.js'] = fpaths[mname];
-  }
-
-  utils.extend(pathname2path, options.additional_files);
-
-  server.addListener('request', function(request, response) {
-    var url = URL.parse(request.url);
-    var fpath = pathname2path[url.pathname];
-    if(fpath) {
-      web.serve_static_file(fpath, response);
+    var pathname2path = {};
+    for(var mname in fpaths) {
+      pathname2path['/' + mname + '.js'] = fpaths[mname];
     }
+  
+    utils.extend(pathname2path, options.additional_files);
+  
+    server.addListener('request', function(request, response) {
+      var url = URL.parse(request.url);
+      var fpath = pathname2path[url.pathname];
+      if(fpath) {
+        web.serve_static_file(fpath, response);
+      }
+    });
   });
 };
 
