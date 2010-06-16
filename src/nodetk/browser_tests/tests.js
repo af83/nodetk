@@ -1,17 +1,33 @@
 
+/**
+ * See nodejs lib sys.
+ */
+var inherits = function (ctor, superCtor) {
+  var tempCtor = function(){};
+  tempCtor.prototype = superCtor.prototype;
+  ctor.super_ = superCtor;
+  ctor.prototype = new tempCtor();
+  ctor.prototype.constructor = ctor;
+};
+
+var stdio_stdout = {
+  write: function(data) {
+    data = data.replace(/\n/g, '<br />');
+    document.body.innerHTML += data;
+  }
+};
+
+
 process = {
   exit: function(){},
   argv: ['-v', '-d'],
   memoryUsage: function() {return 'Not available'},
-  stdout: {
-    write: function(data) {
-      data = data.replace(/\n/g, '<br />');
-      document.body.innerHTML += data;
-    }
-  },
+  stdout: stdio_stdout,
+  stdio: stdio_stdout,
   binding: function() {return {
     writeError: function(data) {console.error(data)}
-  }}
+  }},
+  inherits: inherits
 };
 
 if(!Object.keys) {

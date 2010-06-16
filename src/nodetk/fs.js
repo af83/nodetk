@@ -1,7 +1,6 @@
 /* Some handy functions to manipulate the FS
  */
 
-var sys = require('sys');
 var fs = require('fs');
 var PATH = require('path');
 
@@ -58,4 +57,42 @@ var getDeepFilesDirs = function(path, callback, fallback) {
   }, fallback);
 };
 exports.getDeepFilesDirs = getDeepFilesDirs;
+
+
+var existsSync = exports.existsSync = function(path) {
+  /** Returns True if the path exists, False otherwise.
+   *  Synchronous function.
+   */
+  try {
+    process.binding('fs').stat(path);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+
+var find_modules_paths = exports.find_modules_paths = function(module_names) {
+  /** Returns dic {} associating each module name with its path.
+   *  If a module path has not been found, the associated value is null.
+   */
+  var results = {};
+  module_names.forEach(function(name){
+    results[name] = null;
+  });
+  var dirs = require.paths.slice();
+  require.paths.forEach(function(path) {
+    var path2 = path + "/libraries"; // to get node libraries
+    if(existsSync(path2)) dirs.push(path2);
+  });
+  dirs.forEach(function(path) {
+    module_names.forEach(function(name) {
+      var module_path = path + '/' + name + '.js';
+      if(results[name] == null && existsSync(module_path)) {
+        results[name] = module_path;
+      }
+    });
+  });
+  return results;
+};
 
