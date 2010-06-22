@@ -4,6 +4,7 @@ var web = require('nodetk/web');
 var nodetkfs = require('nodetk/fs');
 var utils = require('nodetk/utils');
 
+var sys = require("sys");
 
 exports.serve_modules = function(server, options) {
   /** Serve modules/packages/files using the specified http server.
@@ -46,9 +47,22 @@ exports.serve_modules = function(server, options) {
   
     server.addListener('request', function(request, response) {
       var url = URL.parse(request.url);
-      var fpath = pathname2path[url.pathname];
+      var wraps = false,
+          pathname = url.pathname;
+      if(pathname.slice(0, 12) == '/wrapped_js/') {
+        wraps = true;
+        pathname = pathname.slice(11, pathname.length);
+      }
+      var fpath = pathname2path[pathname];
       if(fpath) {
-        web.serve_static_file(fpath, response);
+        var name, before, after;
+        if(wraps) {
+          name = pathname.slice(1, pathname.length-3);
+          before = 'require.define({"' + name + '":';
+          before += 'function(require, exports, module) {';
+          after = '}}, []);';
+        }
+        web.serve_static_file(fpath, response, before, after);
       }
     });
   });

@@ -63,8 +63,15 @@ var check_url = exports.check_url = function(url, options, callback, fallback) {
 }
 
 
-exports.serve_static_file = function(fpath, response) {
+exports.serve_static_file = function(fpath, response, before, after) {
   /* Send file (located at fpath) as response (http.ServerResponse).
+   *
+   * Arguments:
+   *  - fpath: path to the file you want to send.
+   *  - response: http.ServerResponse obj.
+   *  - before: optional, string to append at the beggining of the file.
+   *  - after: optional, string to append at the end of the file.
+   *
    */
   headers = {'Content-Encoding': "chunked"};
   if(fpath.match(/\.js$/)) headers['Content-Type'] = 'application/javascript';
@@ -72,11 +79,13 @@ exports.serve_static_file = function(fpath, response) {
   else if(fpath.match(/\.html$/)) headers['Content-Type'] = 'text/html';
 
   response.writeHead(200, headers);
+  if(before) response.write(before);
   var rs = fs.createReadStream(fpath, {encoding: 'binary'});
   rs.addListener('data', function(chunk) {
     response.write(chunk, 'binary');
   });
   rs.addListener('end', function() {
+    if(after) response.write(after);
     response.end();
   });
 };

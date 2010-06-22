@@ -6,10 +6,32 @@
 
     <script type="text/javascript" src="/init_browser.js"></script>
     <script type="text/javascript" src="/yabble.js"></script>
+
     <script type="text/javascript">
       require.reset();
-      require.setModuleRoot('/');
-      require.run('tests');
+
+      // To load using eval, comment out the two following lines:
+      require.useScriptTags();
+      require.setModuleRoot('wrapped_js/');
+
+      require.ensure([
+        'sys',
+        'assert',
+        'events',
+        'tests',
+        'nodetk/logging',
+        'nodetk/testing/tests_runner',
+        'nodetk/testing/custom_assert',
+        'nodetk/orchestration/callbacks',
+        'nodetk/tests/orchestration/test_callbacks',
+        'nodetk/utils',
+        'nodetk/tests/test_utils',
+        'nodetk/text/search',
+        'nodetk/tests/text/test_search'
+      ], function() {
+        require.run('tests');
+      });
+
     </script>
   </head>
 
