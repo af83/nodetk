@@ -34,6 +34,8 @@ process = {
   inherits: inherits
 };
 
+__dirname = 'browser';
+
 if(!Object.keys) {
   // The function is only defined in V8.
   Object.keys = function(obj) {
