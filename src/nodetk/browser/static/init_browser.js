@@ -24,6 +24,7 @@ var stdio_stdout = {
 process = {
   exit: function(){},
   argv: ['-v', '-d'],
+  browser: true,
   memoryUsage: function() {return 'Not available'},
   stdout: stdio_stdout,
   stdio: stdio_stdout,
