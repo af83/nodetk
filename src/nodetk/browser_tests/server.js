@@ -18,7 +18,7 @@ bserver.serve_modules(server, {
 });
 
 server.listen(8549);
-sys.puts('Server listning on http://localhost:8549' +
-         '\nGo there to run browsers tests.');
+sys.puts('Server listning...' +
+         '\nGo on http://localhost:8549/tests.html to run browsers tests.');
 
 
