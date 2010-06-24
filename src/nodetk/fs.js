@@ -75,8 +75,8 @@ var existsSync = exports.existsSync = function(path) {
 
 var find_modules_paths = exports.find_modules_paths = function(module_names) {
   /** Returns dic {} associating each module name with its path.
-   *  If a module path has not been found, the associated value is null.
-   *  Sunchronous function.
+   *  If a module path has not been found, an exception is thrown.
+   *  Synchronous function.
    */
   var results = {};
   module_names.forEach(function(name){
@@ -95,6 +95,13 @@ var find_modules_paths = exports.find_modules_paths = function(module_names) {
       }
     });
   });
+  var not_found = module_names.filter(function(name) {
+    return results[name] == null;
+  });
+  if(not_found.length > 0) {
+    var msg = "The following modules could not be found: " + not_found.join(', ');
+    throw new Error(msg);
+  }
   return results;
 };
 

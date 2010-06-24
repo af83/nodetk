@@ -34,5 +34,15 @@ exports.tests = [
   });
 }],
 
+
+['find_modules_paths()', 2, function() {
+  var res = fstk.find_modules_paths(['assert', 'sys']);
+  assert.ok(res);
+  assert.throws(function() {
+    fstk.find_modules_paths(['tototititiotot']);
+  });
+}],
+
+
 ];
 
