@@ -8,6 +8,7 @@ It includes:
  * a debug function, which you can activate/deactivate widely
  * a few functions to manipulate directories or files
  * a test runner, to collect and run tests one at a time
+ * some stuff to serve nodejs modules / packages by http server
  * miscellaneous utility functions
 
 ## Setup
@@ -15,6 +16,12 @@ How to use these libraries / tools :
 
 In your .bashrc (or whatever rc) file, set the bin dir in your PATH env variable:
 export PATH=$PATH:/path/to/nodetk/bin
+
+If you which to use the "serve nodejs package / mudules" feature, you should have
+the dir where are located the nodejs libs in your NODE_PATH:
+<code>
+export NODE_PATH=~/bin/node/lib
+</code>
 
 and the src dir in your NODE_PATH env variable:
 <pre><code>
