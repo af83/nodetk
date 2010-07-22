@@ -18,6 +18,7 @@ var REQ = function(type, url, data, options, callback) {
    * Arguments:
    *  - options: hash, with the possible members:
    *    - emulate_browser: Add some firefox headers if set to True
+   *    - additional_headers: hash containing some headers to add / redefine.
    */
   var purl = URL.parse(url);
   var qs = purl.query || '';
@@ -29,6 +30,7 @@ var REQ = function(type, url, data, options, callback) {
   var headers = {
     'host': purl.hostname,
   };
+  extend(headers, options.additional_headers || {});
   if(options.emulate_browser) extend(headers, {
     'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686; fr; rv:1.9.1.9) Gecko/20100401 Ubuntu/9.10 (karmic) Firefox/3.5.9',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -59,13 +61,13 @@ var REQ = function(type, url, data, options, callback) {
   });
 }
 
-var GET = exports.GET = function(url, data, callback) {
+var GET = exports.GET = function(url, data, callback, options) {
   if(data == {}) data = null;
-  return REQ('GET', url, data, {}, callback);
+  return REQ('GET', url, data, options || {}, callback, options);
 };
 
-var POST = exports.POST = function(url, data, callback) {
-  return REQ('POST', url, data, {}, callback);
+var POST = exports.POST = function(url, data, callback, options) {
+  return REQ('POST', url, data, options || {}, callback, options);
 };
 // ----------------------------------------------------------
 

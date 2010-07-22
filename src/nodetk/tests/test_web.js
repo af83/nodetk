@@ -74,16 +74,19 @@ exports.tests = [
 
 ['GET', 1, function() {
   test_server.responders.push(responder_mirror);
+  var options = {
+    additional_headers: {toto: 'titi'}
+  };
   web.GET(url + '/toto/titi?param=tata', {
     param2: 'tutu'
   }, function(statusCode, headers, data) {
     assert.deepEqual(JSON.parse(data), [
       "GET",
       "/toto/titi?param=tata&param2=tutu",
-      {"host":"127.0.0.1","connection":"close"},
+      {"host":"127.0.0.1","connection":"close","toto":"titi"},
       ''
     ]);
-  });
+  }, options);
 }],
 
 ['POST', 1, function() {
