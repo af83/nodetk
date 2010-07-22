@@ -54,8 +54,59 @@ var responder_empty_header = function(request, response) {
 };
 
 
+var responder_mirror = function(request, response) {
+  response.writeHead(200, {});
+  var data = '';
+  request.on('data', function(chunk) {
+    data += chunk;
+  });
+  request.on('end', function() {
+    response.end(JSON.stringify([
+      request.method,
+      request.url,
+      request.headers,
+      data
+    ]));
+  });
+}
 
 exports.tests = [
+
+['GET', 1, function() {
+  test_server.responders.push(responder_mirror);
+  web.GET(url + '/toto/titi?param=tata', {
+    param2: 'tutu'
+  }, function(statusCode, headers, data) {
+    assert.deepEqual(JSON.parse(data), [
+      "GET",
+      "/toto/titi?param=tata&param2=tutu",
+      {"host":"127.0.0.1","connection":"close"},
+      ''
+    ]);
+  });
+}],
+
+['POST', 1, function() {
+  test_server.responders.push(responder_mirror);
+  web.POST(url + '/toto/titi?param=tata', {
+    param2: 'tutu'
+  }, function(statusCode, headers, data) {
+    assert.deepEqual(JSON.parse(data), [
+      "POST",
+      "/toto/titi?param=tata",
+      {
+        "host": "127.0.0.1",
+        "connection": "close",
+        "content-type": "application/x-www-form-urlencoded",
+        "transfer-encoding": "chunked"
+      },
+      'param2=tutu'
+    ]);
+  });
+}],
+
+// ------------------------------------------------------
+
 
 ['check_url_200', 1, function() {
   test_server.responders.push(responder_ok);
@@ -103,11 +154,16 @@ exports.tests = [
 
 ['check url: empty header field', 1, function() {
   test_server.responders.push(responder_empty_header);
+  test_server.responders.push(responder_ok);
   web.check_url(url, {}, function(info) {
-    assert.ok(false, "This should never be called");
-  }, function(err) {
+    assert.deepEqual(info, {
+      "content-type": "text/html; charset=UTF-8",
+      "content-length": 6,
+      'location': url + '/toto'
+    });
     test_server.server.close();
-    assert.ok(err);
+  }, function(err) {
+    assert.ok(false, 'This should never be called.');
   });
 }],
 

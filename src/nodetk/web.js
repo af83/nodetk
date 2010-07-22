@@ -2,9 +2,72 @@ var fs = require('fs');
 var http = require('http');
 var sys = require('sys');
 var URL = require('url');
+var querystring = require('querystring');
 var debug = require('nodetk/logging').debug;
 
 var extend = require('./utils').extend;
+
+
+
+//--------------------------------------------------
+
+var REQ = function(type, url, data, options, callback) {
+  /* Make a request to the given URL, and call:
+   *  callback(http_code, headers, data);
+   *
+   * Arguments:
+   *  - options: hash, with the possible members:
+   *    - emulate_browser: Add some firefox headers if set to True
+   */
+  var purl = URL.parse(url);
+  var qs = purl.query || '';
+  var client = http.createClient(purl.port || 80, purl.hostname);
+  client.addListener('error', function(err) {
+    console.log(err.message);
+    console.log(err.stack);
+  });
+  var headers = {
+    'host': purl.hostname,
+  };
+  if(options.emulate_browser) extend(headers, {
+    'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686; fr; rv:1.9.1.9) Gecko/20100401 Ubuntu/9.10 (karmic) Firefox/3.5.9',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'fr-fr,fr;q=0.8,en;q=0.5,en-us;q=0.3',
+    //'Accept-Encoding': 'gzip,deflate',
+  });
+  if(type == 'POST' || type == 'PUT') {
+    headers['content-type'] = 'application/x-www-form-urlencoded';
+  }
+  else if (data) {
+    if(qs) qs += '&';
+    qs += querystring.stringify(data);
+  }
+  var request = client.request(type, purl.pathname +'?'+ qs, headers);
+  if((type == 'POST' || type == 'PUT') && data) {
+    request.write(querystring.stringify(data), 'utf8');
+  }
+  request.end();
+  var data = '';
+  request.on('response', function(response) {
+    response.setEncoding('utf8');
+    response.on('data', function(chunk) {
+      data += chunk;
+    });
+    response.on('end', function() {
+      callback(response.statusCode, response.headers, data);
+    });
+  });
+}
+
+var GET = exports.GET = function(url, data, callback) {
+  if(data == {}) data = null;
+  return REQ('GET', url, data, {}, callback);
+};
+
+var POST = exports.POST = function(url, data, callback) {
+  return REQ('POST', url, data, {}, callback);
+};
+// ----------------------------------------------------------
 
 
 var check_url = exports.check_url = function(url, options, callback, fallback) {
