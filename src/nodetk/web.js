@@ -24,6 +24,7 @@ var REQ = function(type, url, data, options, callback) {
   var qs = purl.query || '';
   var client = http.createClient(purl.port || 80, purl.hostname);
   client.addListener('error', function(err) {
+    console.log('Error in nodetk web client.');
     console.log(err.message);
     console.log(err.stack);
   });

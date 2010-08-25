@@ -14,9 +14,9 @@ var url = 'http://127.0.0.1:' + port;
 exports.setup = function(callback) {
   if(!test_server) {
     test_server = testing_server.get_test_http_server();
-    test_server.server.listen(port);
+    test_server.server.listen(port, callback);
   }
-  callback();
+  else callback();
 }
 
 var responder_ok = function(request, response) {
