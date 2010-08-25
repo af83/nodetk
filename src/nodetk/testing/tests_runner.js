@@ -2,8 +2,11 @@
  * Tests are ran one by one, synchronously.
  *
  * Tests must be in module.tests.
- * You can specify a setup function (using exports.setup), 
- * which will run before every test.
+ * You can specify:
+ *  - a setup function (using exports.setup), which will run before every test.
+ *  - a module_init function, which will run once before the first test start.
+ *  - a module_close function, which will run once all tests are done.
+ *
  */
 
 var sys = require("sys");
@@ -54,12 +57,18 @@ var run_test_file = exports.run_test_file = function(test_file, callback) {
   debug('Run test file ' + test_file);
   try {
     var module = require(test_file);
-    setup = module.setup || dummy;
-    CLB.sync_calls(run_test, module.tests || [], function() {
-      verbose && sys.puts('-----------------');
-      verbose && sys.puts(test_file + '.js: ' + module.tests.length +
-                          " test(s) succeed\n");
-      callback && callback();
+    setup = module.setup || dummy; // To be run before every test
+    module_init = module.module_init || dummy; // To be ran once before the first test
+    module_close = module.module_close || dummy; // To be ran once after all tests have finished
+    module_init(function() {
+      CLB.sync_calls(run_test, module.tests || [], function() {
+        verbose && sys.puts('-----------------');
+        verbose && sys.puts(test_file + '.js: ' + module.tests.length +
+                            " test(s) succeed\n");
+        module_close(function() {
+          callback && callback();
+        });
+      });
     });
   } catch (e) {
     sys.puts("Error while running test file " + test_file);

@@ -11,13 +11,18 @@ var web = require('nodetk/web');
 var test_server;
 var port = 8769;
 var url = 'http://127.0.0.1:' + port;
-exports.setup = function(callback) {
-  if(!test_server) {
-    test_server = testing_server.get_test_http_server();
-    test_server.server.listen(port, callback);
-  }
-  else callback();
+
+
+exports.module_init = function(callback) {
+  test_server = testing_server.get_test_http_server();
+  test_server.server.listen(port, callback);
 }
+
+exports.module_close = function(callback) {
+  test_server.server.close();
+  callback();
+}
+
 
 var responder_ok = function(request, response) {
   response.writeHead(200, {
@@ -164,7 +169,6 @@ exports.tests = [
       "content-length": 6,
       'location': url + '/toto'
     });
-    test_server.server.close();
   }, function(err) {
     assert.ok(false, 'This should never be called.');
   });
