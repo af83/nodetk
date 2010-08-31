@@ -42,6 +42,9 @@ The -v option displays some info about what tests are rand.
 The -d option enables the debug functions.
 
 
+You do not need (and should not) add the nodetk path at the top of your test files...
+
+
 ## License
 
 This program is free software: you can redistribute it and/or modify

@@ -44,6 +44,8 @@ var run_test = function(name, expected_asserts, test, callback) {
    * callback is ran when the expected number of asserts has been called.
    */
   setup(function() {
+    verbose && console.log('Starting test "'+name+'" (' + 
+                           expected_asserts+' asserts expected)...');
     var test_waiter = CLB.get_waiter(expected_asserts, function(){
       verbose && sys.puts(name + ': ' + expected_asserts + " asserts done.");
       callback && callback();
