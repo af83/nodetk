@@ -6,11 +6,11 @@ var utils = require('nodetk/utils');
 
 var sys = require("sys");
 
-exports.serve_modules = function(server, options) {
-  /** Serve modules/packages/files using the specified http server.
+
+exports.serve_modules_connector = function(options) {
+  /** Returns connect middleware to serve modules/packages/files.
    *
    * Arguments:
-   *  - server: http.Server
    *  - options:
    *    - modules: Array of modules we want to serve. There modules will be 
    *      searched on require.paths when this function is initialized.
@@ -34,38 +34,40 @@ exports.serve_modules = function(server, options) {
     '/events.js': __dirname + '/static/events.js'
   });
 
-  var fpaths = nodetkfs.find_modules_paths(options.modules);
-  nodetkfs.find_packages_paths(options.packages, function(fpaths2) {
-    utils.extend(fpaths, fpaths2);
+  var pathname2path = {};
+  utils.extend(pathname2path, options.additional_files);
 
-    var pathname2path = {};
+  var connector = function(request, response, next) {
+    var url = URL.parse(request.url);
+    var wraps = false,
+        pathname = url.pathname;
+    if(pathname.slice(0, 12) == '/wrapped_js/') {
+      wraps = true;
+      pathname = pathname.slice(11, pathname.length);
+    }
+    var fpath = pathname2path[pathname];
+    if(fpath) {
+      var name, before, after;
+      if(wraps) {
+        name = pathname.slice(1, pathname.length-3);
+        before = 'require.define({"' + name + '":';
+        before += 'function(require, exports, module) {';
+        before += 'require.paths = [];';
+        after = '}}, []);';
+      }
+      web.serve_static_file(fpath, response, before, after);
+    }
+    else next();
+  };
+
+  nodetkfs.find_packages_paths(options.packages, function(fpaths2) {
+    var fpaths = nodetkfs.find_modules_paths(options.modules);
+    utils.extend(fpaths, fpaths2);
     for(var mname in fpaths) {
       pathname2path['/' + mname + '.js'] = fpaths[mname];
     }
-  
-    utils.extend(pathname2path, options.additional_files);
-  
-    server.addListener('request', function(request, response) {
-      var url = URL.parse(request.url);
-      var wraps = false,
-          pathname = url.pathname;
-      if(pathname.slice(0, 12) == '/wrapped_js/') {
-        wraps = true;
-        pathname = pathname.slice(11, pathname.length);
-      }
-      var fpath = pathname2path[pathname];
-      if(fpath) {
-        var name, before, after;
-        if(wraps) {
-          name = pathname.slice(1, pathname.length-3);
-          before = 'require.define({"' + name + '":';
-          before += 'function(require, exports, module) {';
-          before += 'require.paths = [];';
-          after = '}}, []);';
-        }
-        web.serve_static_file(fpath, response, before, after);
-      }
-    });
   });
+
+  return connector;
 };
 
