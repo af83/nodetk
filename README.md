@@ -1,5 +1,7 @@
 # nodetk
 
+Works with node v.0.3.0.
+
 ## Introduction
 nodetk is a set of small libraries intended to facilitate the use of nodejs.
 It includes:
