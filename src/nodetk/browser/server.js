@@ -4,8 +4,6 @@ var web = require('nodetk/web');
 var nodetkfs = require('nodetk/fs');
 var utils = require('nodetk/utils');
 
-var sys = require("sys");
-
 
 exports.serve_modules_connector = function(options) {
   /** Returns connect middleware to serve modules/packages/files.

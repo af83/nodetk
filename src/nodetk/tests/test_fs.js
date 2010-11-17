@@ -1,5 +1,4 @@
 
-var sys = require('sys');
 var assert = require('nodetk/testing/custom_assert');
 var fstk = require('nodetk/fs');
 

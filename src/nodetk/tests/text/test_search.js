@@ -1,4 +1,3 @@
-var sys = require("sys");
 var assert = require("nodetk/testing/custom_assert");
 var debug = require('nodetk/logging').debug;
 

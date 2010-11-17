@@ -1,7 +1,5 @@
-/* Provides debug function, wrapper around sys.puts, [de]activable on demand.
+/* Provides debug function, wrapper around console.log, [de]activable on demand.
  */
-
-var sys = require("sys");
 
 var debug_active = false;
 exports.debug = function(/* stuff to print*/) {
@@ -11,7 +9,7 @@ exports.debug = function(/* stuff to print*/) {
       if(typeof elem == "string") return elem;
       return JSON.stringify(elem);
     }).join(" ");
-    sys.puts(str);
+    console.log(str);
   }
 };
 

@@ -1,6 +1,5 @@
 var fs = require('fs');
 var http = require('http');
-var sys = require('sys');
 var URL = require('url');
 var querystring = require('querystring');
 var debug = require('nodetk/logging').debug;
@@ -103,7 +102,7 @@ var check_url = exports.check_url = function(url, options, callback, fallback) {
   }
   var client = http.createClient(parsed_url.port || 80, parsed_url.hostname);
   client.addListener('error', function(error) {
-    sys.puts("Error on client:", error.message, '\n', error.stack);
+    console.log("Error on client:", error.message, '\n', error.stack);
     fallback && fallback(error);
   });
   var path = (parsed_url.pathname || '/') + (parsed_url.search || '');

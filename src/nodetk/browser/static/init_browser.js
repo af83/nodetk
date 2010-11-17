@@ -4,7 +4,7 @@
 
 
 var inherits = function (ctor, superCtor) {
-  /** See nodejs lib sys.
+  /** See nodejs lib sys (or util).
    */
   var tempCtor = function(){};
   tempCtor.prototype = superCtor.prototype;

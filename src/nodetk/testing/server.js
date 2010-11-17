@@ -1,4 +1,3 @@
-var sys = require('sys');
 var http = require('http');
 var URL = require('url');
 
