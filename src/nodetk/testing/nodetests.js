@@ -23,7 +23,8 @@ var run_tests = function() {
   if(tests_dir[0] != '/') tests_dir = process.cwd() + '/' + tests_dir;
   util.print("Run tests in " + tests_dir + '\n');
 
-  get_test_files(tests_dir, function(to_test) {
+  if(tests_dir.match(/\.js$/)) tests_runner.run([tests_dir]);
+  else get_test_files(tests_dir, function(to_test) {
     tests_runner.run(to_test);
   });
 
