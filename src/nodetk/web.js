@@ -21,7 +21,9 @@ var REQ = function(type, url, data, options, callback) {
    */
   var purl = URL.parse(url);
   var qs = purl.query || '';
-  var client = http.createClient(purl.port || 80, purl.hostname);
+  var secure = purl.protocol == 'https:';
+  var default_port = secure && 443 || 80;
+  var client = http.createClient(purl.port || default_port, purl.hostname, secure);
   client.addListener('error', function(err) {
     console.log('Error in nodetk web client.');
     console.log(err.message);
