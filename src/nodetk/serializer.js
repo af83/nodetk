@@ -9,7 +9,8 @@ var crypto = require('crypto')
   ;
 
 
-exports.dump_str = function(obj) {
+var SERIALIZER = exports;
+SERIALIZER.dump_str = function(obj) {
   /* Returns dump of the given JSON obj as a str.
    * There is no encryption, and it might not be safe.
    * Might throw an error.
@@ -22,7 +23,7 @@ exports.dump_str = function(obj) {
 };
 
 
-exports.load_str = function(str) {
+SERIALIZER.load_str = function(str) {
   /* Returns obj loaded from given string. 
    * Might throw an error.
    *
@@ -46,7 +47,7 @@ var CYPHER = 'aes256';
 var CODE_ENCODING = "hex";
 var DATA_ENCODING = "utf8";
 
-exports.dump_secure_str = function(obj, encrypt_key, validate_key) {
+SERIALIZER.dump_secure_str = function(obj, encrypt_key, validate_key) {
   /* Return str representing the given obj. It is signed and encrypted using the
    * given keys.
    */
@@ -63,7 +64,7 @@ exports.dump_secure_str = function(obj, encrypt_key, validate_key) {
   return digest + nonce_crypt + res;
 };
 
-exports.load_secure_str = function(str, encrypt_key, validate_key) {
+SERIALIZER.load_secure_str = function(str, encrypt_key, validate_key) {
   /* Given a string resulting from dump_secure_str, load corresponding JSON.
    */
   var expected_digest = str.substring(0, 28);
@@ -78,4 +79,20 @@ exports.load_secure_str = function(str, encrypt_key, validate_key) {
   if(digest != expected_digest) throw new Error("Bad digest");
   return JSON.parse(data);
 };
+
+
+SERIALIZER.SecureSerializer = function(encrypt_key, validate_key) {
+  /* Class to store encryption/validation keys in a more convenient way. */
+  this.encrypt_key = encrypt_key;
+  this.validate_key = validate_key;
+};
+SERIALIZER.SecureSerializer.prototype = {
+  dump_str: function(obj) {
+    return SERIALIZER.dump_secure_str(obj, this.encrypt_key, this.validate_key);
+  }
+, load_str: function(str) {
+    return SERIALIZER.load_secure_str(str, this.encrypt_key, this.validate_key);
+  }
+};
+
 
