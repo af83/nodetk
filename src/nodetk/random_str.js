@@ -1,4 +1,4 @@
-/* This code has been taken from:
+/* This code has originally been taken from:
  * http://comments.gmane.org/gmane.comp.lang.javascript.nodejs/2378
  *
  * Posted by Marak Squires.
@@ -8,11 +8,11 @@ exports.randomString = function(bits) {
   /* RandomString returns a pseudo-random ASCII string
    * which contains at least the specified number of bits of entropy.
    * The returned value is a string of length ⌈bits/6⌉ of characters 
-   * from the base64 alphabet.
+   * from the base64url alphabet.
    */
   var rand
     , i
-    , chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+    , chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
     , ret=''
     ;
   // in v8, Math.random() yields 32 pseudo-random bits (in spidermonkey it gives 53)
