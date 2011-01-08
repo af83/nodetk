@@ -5,7 +5,7 @@ var http = require("http"),
     bserver = require('nodetk/browser/server');
 
 var connector = bserver.serve_modules_connector( {
-  modules: ['assert', 'util'],
+  modules: ['assert'],
   packages: ['nodetk'],
   additional_files: {
     '/tests.html': __dirname + '/tests.html',

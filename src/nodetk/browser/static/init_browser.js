@@ -47,3 +47,13 @@ if(!Object.keys) {
   }
 }
 
+// Defines a few functions of the node util module:
+require.define({"util": function(require, exports, module) {
+  exports.inherits = inherits;
+}});
+
+// Defines Buffer.isBuffer function for assert.deepEqual function:
+Buffer = {
+  isBuffer: function(){return false}
+};
+

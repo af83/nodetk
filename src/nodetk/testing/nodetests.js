@@ -1,8 +1,6 @@
 /* Run all tests present in files 'test_*.js' present in given directory or sub dirs.
  * Search recursivly for test files.
  */
-var util = require('util');
-
 require.paths.unshift(__dirname + '/../..') // to have nodetk in require.paths
 var fs = require('nodetk/fs');
 
@@ -21,7 +19,7 @@ var run_tests = function() {
   });
   
   if(tests_dir[0] != '/') tests_dir = process.cwd() + '/' + tests_dir;
-  util.print("Run tests in " + tests_dir + '\n');
+  console.log("Run tests in " + tests_dir);
 
   if(tests_dir.match(/\.js$/)) tests_runner.run([tests_dir]);
   else get_test_files(tests_dir, function(to_test) {

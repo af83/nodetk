@@ -8,8 +8,6 @@
  *  - a module_close function, which will run once all tests are done.
  *
  */
-var util = require('util');
-
 var custom_assert = require("nodetk/testing/custom_assert");
 var CLB = require('nodetk/orchestration/callbacks');
 var debug = require('nodetk/logging').debug;
@@ -43,10 +41,10 @@ var run_test = function(name, expected_asserts, test, callback) {
    * callback is ran when the expected number of asserts has been called.
    */
   setup(function() {
-    verbose && util.print('Starting test "'+name+'" (' + 
-                           expected_asserts+' asserts expected)...\n');
+    verbose && console.log('Starting test "'+name+'" (' + 
+                           expected_asserts+' asserts expected)...');
     var test_waiter = CLB.get_waiter(expected_asserts, function(){
-      verbose && util.print(name + ': ' + expected_asserts + " asserts done.\n");
+      verbose && console.log(name + ': ' + expected_asserts + " asserts done.");
       callback && callback();
     });
     custom_assert._set_assert_callback(test_waiter);
@@ -63,16 +61,16 @@ var run_test_file = exports.run_test_file = function(test_file, callback) {
     module_close = module.module_close || dummy; // To be ran once after all tests have finished
     module_init(function() {
       CLB.sync_calls(run_test, module.tests || [], function() {
-        verbose && util.print('-----------------\n');
-        verbose && util.print(test_file + '.js: ' + module.tests.length +
-                            " test(s) succeed\n");
+        verbose && console.log('-----------------');
+        verbose && console.log(test_file + '.js: ' + module.tests.length +
+                            " test(s) succeed");
         module_close(function() {
           callback && callback();
         });
       });
     });
   } catch (e) {
-    util.print("Error while running test file " + test_file + '\n');
+    console.log("Error while running test file " + test_file);
     throw e;
   }
 };
@@ -80,9 +78,9 @@ var run_test_file = exports.run_test_file = function(test_file, callback) {
 var display_process_infos = function() {
   var end_time = new Date().getTime();
   var mem_use = process.memoryUsage();
-  util.print("\n================\n");
-  util.print("Ellapsed time: " + (end_time - start_time) + "ms.\n");
-  util.print("Memory use: " + JSON.stringify(mem_use) + '\n');
+  console.log("\n================");
+  console.log("Ellapsed time: " + (end_time - start_time) + "ms.");
+  console.log("Memory use: " + JSON.stringify(mem_use));
 };
 
 

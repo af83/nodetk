@@ -1,7 +1,6 @@
 /* Wraps assert functions to call a callback, and display a dot (.) when success */
 
 var assert = require('assert');
-var util = require('util');
 
 // ----------------------------------------
 // New assert functions:
@@ -32,7 +31,7 @@ for(var attr in assert)
   (function(func) {
     exports[func] = function() {
       assert[func].apply(this, arguments);
-      util.print('.');
+      process.stdout.write('.');
       callback();
     };
   })(attr);
