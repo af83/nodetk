@@ -36,10 +36,10 @@ SERIALIZER.load_str = function(str) {
 
 
 var sign_str = function(str, key) {
-  /* Return base64 signed sha1 hash of str using key */
+  /* Return base64url signed sha1 hash of str using key */
   var hmac = crypto.createHmac('sha1', key);
   hmac.update(str);
-  return hmac.digest('base64');
+  return hmac.digest('base64').replace(/\+/g, '-').replace(/\//g, '_');
 };
 
 
