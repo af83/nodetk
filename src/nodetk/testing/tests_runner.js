@@ -27,10 +27,13 @@ exports.run = function(tests_files) {
   start_time = new Date().getTime();
   console.log("Number of test files to run:", tests_files.length);
   CLB.sync_calls(run_test_file, tests_files, function() {
-    display_process_infos();
-    // TODO: maybe we should wait a bit here, if there is more callbacks than expected,
-    // then there is a problem...
-    process.exit(0);
+    process.nextTick(function () {
+      display_process_infos();
+      process.exit(0);
+    });
+    custom_assert._set_assert_callback(function() {
+      throw new Error('More asserts than expected were ran :(');
+    });
   });
   process.once('exit', function() {
     if(NB_TEST_FILES_RAN != tests_files.length) {
