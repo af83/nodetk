@@ -15,6 +15,8 @@ var debug = require('nodetk/logging').debug;
 var verbose;
 var start_time;
 
+NB_TEST_FILES_RAN = 0;
+
 exports.run = function(tests_files) {
   var args = {};
   process.argv.forEach(function(e){args[e]=true;});
@@ -23,11 +25,18 @@ exports.run = function(tests_files) {
   else debug.off();
 
   start_time = new Date().getTime();
+  console.log("Number of test files to run:", tests_files.length);
   CLB.sync_calls(run_test_file, tests_files, function() {
     display_process_infos();
     // TODO: maybe we should wait a bit here, if there is more callbacks than expected,
     // then there is a problem...
     process.exit(0);
+  });
+  process.once('exit', function() {
+    if(NB_TEST_FILES_RAN != tests_files.length) {
+      console.log('\nThe tests did not finish :(');
+      process.exit(1);
+    }
   });
 };
 
@@ -65,6 +74,7 @@ var run_test_file = exports.run_test_file = function(test_file, callback) {
         verbose && console.log(test_file + '.js: ' + module.tests.length +
                             " test(s) succeed");
         module_close(function() {
+          NB_TEST_FILES_RAN += 1;
           callback && callback();
         });
       });

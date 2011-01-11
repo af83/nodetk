@@ -4,7 +4,7 @@ var assert = require("nodetk/testing/custom_assert");
 
 exports.tests = [
 
-['same_sets()', 14, function() {
+['same_sets()', 22, function() {
   var same_sets = [
     [[1, 2, 3], [1, 2, 3]],
     [[], []],
@@ -18,11 +18,13 @@ exports.tests = [
   ];
   same_sets.forEach(function(sets) {
     var s1 = sets[0], s2 = sets[1];
+    // FOUR (4) asserts are done on each iteration
     assert.doesNotThrow(function(){assert.same_sets(s1, s2)});
     assert.doesNotThrow(function(){assert.same_sets(s2, s1)});
   });
   different_sets.forEach(function(sets) {
     var s1 = sets[0], s2 = sets[1];
+    // TWO (2) asserts are done on each iteration
     assert.throws(function(){assert.same_sets(s1, s2)});
     assert.throws(function(){assert.same_sets(s2, s1)});
   });
