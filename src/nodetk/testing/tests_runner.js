@@ -35,7 +35,8 @@ exports.run = function(tests_files) {
       throw new Error('More asserts than expected were ran :(');
     });
   });
-  process.once('exit', function() {
+  if(process.browser) console.log("Cannot detect if all tests where ran on brower");
+  else process.once('exit', function() {
     if(NB_TEST_FILES_RAN != tests_files.length) {
       console.log('\nThe tests did not finish :(');
       process.exit(1);

@@ -31,7 +31,10 @@ process = {
   binding: function() {return {
     writeError: function(data) {console.error(data)}
   }},
-  inherits: inherits
+  inherits: inherits,
+  nextTick: function(fn) {
+    setTimeout(fn, 0);
+  }
 };
 
 __dirname = 'browser';
