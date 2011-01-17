@@ -19,6 +19,7 @@ var REQ = function(type, url, data, options, callback) {
    *    - emulate_browser: Add some firefox headers if set to True
    *    - additional_headers: hash containing some headers to add / redefine.
    */
+  var body;
   var purl = URL.parse(url);
   var qs = purl.query || '';
   var secure = purl.protocol == 'https:';
@@ -39,16 +40,18 @@ var REQ = function(type, url, data, options, callback) {
     'Accept-Language': 'fr-fr,fr;q=0.8,en;q=0.5,en-us;q=0.3',
     //'Accept-Encoding': 'gzip,deflate',
   });
-  if(type == 'POST' || type == 'PUT') {
+  if(type == 'POST' || type == 'PUT' || type == "DELETE") {
+    body = data && querystring.stringify(data) || "";
     headers['content-type'] = 'application/x-www-form-urlencoded';
+    headers['content-length'] = Buffer.byteLength(body);
   }
   else if (data) {
     if(qs) qs += '&';
     qs += querystring.stringify(data);
   }
   var request = client.request(type, purl.pathname +'?'+ qs, headers);
-  if((type == 'POST' || type == 'PUT') && data) {
-    request.write(querystring.stringify(data), 'utf8');
+  if(body) {
+    request.write(body, 'utf8');
   }
   request.end();
   var data = '';

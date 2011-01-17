@@ -105,7 +105,7 @@ exports.tests = [
         "host": "127.0.0.1",
         "connection": "close",
         "content-type": "application/x-www-form-urlencoded",
-        "transfer-encoding": "chunked"
+        "content-length": "11"
       },
       'param2=tutu'
     ]);
