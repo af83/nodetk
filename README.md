@@ -153,6 +153,7 @@ This package provides some testing functionalities.
 ### utils
 
  - extend(target, obj1[, obj2, ...]): the jQuery extend function.
+ - deep_extend(target, obj1[, obj1, obj2, ...]): deeply merge objects. Arrays are not merged, the last arriving will override others.
  - count_properties(obj): Counts and returns the number of properties in obj.
  - isArray(obj): Returns True if obj is an Array.
  - each(obj, callback): Calls callback(attr_name, attr_value) for each attr of given Object.
