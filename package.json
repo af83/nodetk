@@ -1,6 +1,11 @@
 { "name" : "nodetk"
+, "description" :  "nodetk is a set of small libraries intended to facilitate the use of nodejs."
 , "version": "0.1.0"
 , "bin" : "./bin/nodetests"
+, "repository" :
+  { "type" : "git"
+  , "url" : "http://github.com/AF83/nodetk.git"
+  }
 , "dependencies": {
   "base64":"",
   "yabble": ""
