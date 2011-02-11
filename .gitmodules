@@ -1,6 +1,0 @@
-[submodule "vendor/yabble"]
-	path = vendor/yabble
-	url = git://github.com/virtuo/yabble.git
-[submodule "vendor/node-base64"]
-	path = vendor/node-base64
-	url = git://github.com/tdebarochez/node-base64.js.git

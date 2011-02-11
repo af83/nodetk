@@ -40,7 +40,7 @@ exports.module_clode = function() {
 
 exports.tests = [
 
-['dump_str & laod_str', VALS.length * 2, function() {
+['dump_str & load_str', VALS.length * 2, function() {
   VALS.forEach(function(val) {
     var dump = serializer.dump_str(val);
     var original = serializer.load_str(dump);

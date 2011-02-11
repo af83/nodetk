@@ -1,10 +1,5 @@
-
-require.paths.unshift(__dirname + '/../../vendor/node-base64')
-
 var crypto = require('crypto')
-
   , base64 = require('base64')
-
   , random_str = require('nodetk/random_str')
   ;
 
@@ -19,12 +14,12 @@ SERIALIZER.dump_str = function(obj) {
    *  - obj: JSON obj.
    *
    */
-  return base64.encode(JSON.stringify(obj));
+  return base64.encode(new Buffer(JSON.stringify(obj)));
 };
 
 
 SERIALIZER.load_str = function(str) {
-  /* Returns obj loaded from given string. 
+  /* Returns obj loaded from given string.
    * Might throw an error.
    *
    * Arguments:
@@ -55,7 +50,7 @@ SERIALIZER.dump_secure_str = function(obj, encrypt_key, validate_key) {
   // Do we need some timestamp to invalidate too old data?
   var nonce_check = random_str.randomString(48); // 8 chars
   var nonce_crypt = random_str.randomString(48); // 8 chars
-  var cypher = crypto.createCipher(CYPHER, encrypt_key + nonce_crypt);  
+  var cypher = crypto.createCipher(CYPHER, encrypt_key + nonce_crypt);
   var data = JSON.stringify(obj);
   var res = cypher.update(nonce_check, DATA_ENCODING, CODE_ENCODING);
   res += cypher.update(data, DATA_ENCODING, CODE_ENCODING);

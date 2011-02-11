@@ -1,6 +1,3 @@
-
-require.paths.unshift(__dirname + '/../../');
-
 var http = require("http"),
     bserver = require('nodetk/browser/server');
 
@@ -23,5 +20,3 @@ server.listen(8549, function() {
   console.log('Server listning...' +
               '\nGo on http://localhost:8549/tests.html to run browsers tests.');
 });
-
-

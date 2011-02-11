@@ -1,0 +1,8 @@
+{ "name" : "nodetk"
+, "version": "0.1.0"
+, "bin" : "./bin/nodetests"
+, "dependencies": {
+  "base64":"",
+  "yabble": ""
+}
+}
