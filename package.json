@@ -7,7 +7,6 @@
   , "url" : "http://github.com/AF83/nodetk.git"
   }
 , "dependencies": {
-  "base64":"",
-  "yabble": ""
+  "base64":""
 }
 }
