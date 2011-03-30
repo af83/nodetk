@@ -1,0 +1,2 @@
+exports.fs = require('./fs');
+
