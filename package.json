@@ -1,6 +1,6 @@
 { "name" : "nodetk"
 , "description" :  "nodetk is a set of small libraries intended to facilitate the use of nodejs."
-, "version": "0.1.4"
+, "version": "0.1.5"
 , "bin" : "./bin/nodetests"
 , "main": "./index.js"
 , "repository" :
