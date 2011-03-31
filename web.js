@@ -74,6 +74,10 @@ var GET = exports.GET = function(url, data, callback, options) {
 var POST = exports.POST = function(url, data, callback, options) {
   return REQ('POST', url, data, options || {}, callback, options);
 };
+
+var PUT = exports.PUT = function(url, data, callback, options) {
+  return REQ('PUT', url, data, options || {}, callback, options);
+};
 // ----------------------------------------------------------
 
 
