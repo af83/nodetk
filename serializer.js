@@ -1,10 +1,21 @@
 var crypto = require('crypto')
-  , base64 = require('base64')
   , random_str = require('nodetk/random_str')
   ;
 
 
 var SERIALIZER = exports;
+
+SERIALIZER.utf8_to_b64 = function(str) {
+  /* Returns base64 encoded version of given utf8 string. */
+  return  (new Buffer(str, "utf8")).toString("base64");
+};
+
+SERIALIZER.b64_to_utf8 = function(b64) {
+  /* Returns uf8 decoded version of given base64 encoded string. */
+  return (new Buffer(b64, "base64")).toString("utf8");
+};
+
+
 SERIALIZER.dump_str = function(obj) {
   /* Returns dump of the given JSON obj as a str.
    * There is no encryption, and it might not be safe.
@@ -14,7 +25,7 @@ SERIALIZER.dump_str = function(obj) {
    *  - obj: JSON obj.
    *
    */
-  return base64.encode(new Buffer(JSON.stringify(obj)));
+  return SERIALIZER.utf8_to_b64(JSON.stringify(obj));
 };
 
 
@@ -26,7 +37,7 @@ SERIALIZER.load_str = function(str) {
    *  - str: string representation of obj to load.
    *
    */
-  return JSON.parse(base64.decode(str));
+  return JSON.parse(SERIALIZER.b64_to_utf8(str));
 };
 
 
